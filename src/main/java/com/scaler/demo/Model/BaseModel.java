@@ -10,11 +10,10 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Data
-@MappedSuperclass
+@MappedSuperclass // to have the below attributes as column in child class while creating tables
 @NoArgsConstructor
 public class BaseModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Date createdAt;
     private Date updatedAt;

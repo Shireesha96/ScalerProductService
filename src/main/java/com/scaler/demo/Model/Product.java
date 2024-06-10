@@ -17,7 +17,7 @@ public class Product extends BaseModel {
     private String price;
     private String imageURL;
 
-    @ManyToOne
+    @ManyToOne //relation
     private Category category;
 
     public ProductResponseDTO convertToResponseDTO() {
