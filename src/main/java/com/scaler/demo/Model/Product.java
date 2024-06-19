@@ -1,6 +1,7 @@
 package com.scaler.demo.Model;
 
 import com.scaler.demo.dto.ProductResponseDTO;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
@@ -17,7 +18,7 @@ public class Product extends BaseModel {
     private String price;
     private String imageURL;
 
-    @ManyToOne //relation
+    @ManyToOne(cascade = CascadeType.REMOVE) //relation // delete products if category mapped to it is deleted
     private Category category;
 
     public ProductResponseDTO convertToResponseDTO() {
