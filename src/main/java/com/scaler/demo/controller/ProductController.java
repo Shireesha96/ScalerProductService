@@ -6,6 +6,7 @@ import com.scaler.demo.dto.CategoryResponseDTO;
 import com.scaler.demo.dto.CreateProductRequestDTO;
 import com.scaler.demo.dto.ProductResponseDTO;
 import com.scaler.demo.service.FakeStoreService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import com.scaler.demo.service.ProductService;
 import org.springframework.web.client.RestTemplate;
@@ -17,7 +18,7 @@ import java.util.List;
 public class ProductController {
     private ProductService productService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(@Qualifier("selfProductService") ProductService productService) {
         this.productService = productService;
     }
 
