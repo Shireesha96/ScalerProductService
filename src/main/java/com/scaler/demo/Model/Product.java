@@ -18,7 +18,7 @@ public class Product extends BaseModel {
     private String price;
     private String imageURL;
 
-    @ManyToOne(cascade = CascadeType.REMOVE) //relation // delete products if category mapped to it is deleted
+    @ManyToOne //relation // delete products if category mapped to it is deleted
     private Category category;
 
     public ProductResponseDTO convertToResponseDTO() {

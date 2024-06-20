@@ -119,4 +119,14 @@ public class FakeStoreService implements ProductService{
         return dto.getBody().ConverToProduct();
     }
 
+    @Override
+    public Category addCategory(String category) {
+        return null;
+    }
+
+    @Override
+    public String deleteCategory(String category) {
+        return "";
+    }
+
 }

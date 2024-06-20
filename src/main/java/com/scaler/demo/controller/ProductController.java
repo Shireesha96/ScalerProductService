@@ -5,6 +5,7 @@ import com.scaler.demo.Model.Product;
 import com.scaler.demo.dto.CategoryResponseDTO;
 import com.scaler.demo.dto.CreateProductRequestDTO;
 import com.scaler.demo.dto.ProductResponseDTO;
+import com.scaler.demo.exception.CategoryNotFoundException;
 import com.scaler.demo.service.FakeStoreService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -63,7 +64,7 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public ProductResponseDTO addProduct(@RequestBody CreateProductRequestDTO dto){
+    public ProductResponseDTO addProduct(@RequestBody CreateProductRequestDTO dto) throws CategoryNotFoundException {
         Product product = productService.addProduct(dto.getTitle(),
                 dto.getDescription(),
                 dto.getPrice(),
@@ -107,6 +108,17 @@ public class ProductController {
     public ProductResponseDTO deleteProductById(@PathVariable("id") Integer id){
         Product product = productService.deleteProductById(id);
         return product.convertToResponseDTO();
+    }
+
+    @PostMapping("category/{name}")
+    public CategoryResponseDTO addCategory(@PathVariable("name") String name){
+        CategoryResponseDTO categoryResponseDTO = productService.addCategory(name).convertToResponseDTO();
+        return categoryResponseDTO;
+    }
+
+    @DeleteMapping("category/{name}")
+    public String deleteCategory(@PathVariable("name") String name){
+        return productService.deleteCategory(name);
     }
 
 }
