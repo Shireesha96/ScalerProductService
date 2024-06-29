@@ -6,7 +6,11 @@ import com.scaler.demo.exception.CategoryNotFoundException;
 import com.scaler.demo.repository.CategoryRepository;
 import com.scaler.demo.repository.ProductRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 
@@ -110,6 +114,18 @@ public class SelfProductService implements ProductService {
     public String deleteCategory(String category) {
         categoryRepository.deleteByName(category);
         return "Category deleted";
+    }
+
+    @Override
+    public List<Product> getPaginatedProducts(int pageNo, int pageSize) {
+        Pageable pageable = (Pageable) PageRequest.of(pageSize, pageNo);
+
+        Page<Product> product = productRepository.findAll(pageable);
+        product.get(); // list of products
+        System.out.println(product.getTotalElements());
+        System.out.println(product.getTotalPages());
+
+        return product.stream().toList();
     }
 
 

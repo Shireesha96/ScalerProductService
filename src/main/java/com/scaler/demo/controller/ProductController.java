@@ -8,6 +8,7 @@ import com.scaler.demo.dto.ProductResponseDTO;
 import com.scaler.demo.exception.CategoryNotFoundException;
 import com.scaler.demo.service.FakeStoreService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import com.scaler.demo.service.ProductService;
 import org.springframework.web.client.RestTemplate;
@@ -119,6 +120,17 @@ public class ProductController {
     @DeleteMapping("category/{name}")
     public String deleteCategory(@PathVariable("name") String name){
         return productService.deleteCategory(name);
+    }
+
+    @GetMapping("products/{pageNo}/{pageSize}")
+
+    public List<ProductResponseDTO> getPaginatedProducts(@PathVariable("pageNo") int pageNo, @PathVariable("pageSize") int pageSize){
+        List<Product> products = productService.getPaginatedProducts(pageNo, pageSize);
+        List<ProductResponseDTO> responseDTOList = new ArrayList<>();
+        for(Product p : products){
+            responseDTOList.add(p.convertToResponseDTO());
+        }
+        return responseDTOList;
     }
 
 }
