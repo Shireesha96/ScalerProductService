@@ -2,13 +2,17 @@ package com.scaler.demo.controller;
 
 import com.scaler.demo.Model.Category;
 import com.scaler.demo.Model.Product;
+import com.scaler.demo.authCommon.Authentication;
 import com.scaler.demo.dto.CategoryResponseDTO;
 import com.scaler.demo.dto.CreateProductRequestDTO;
 import com.scaler.demo.dto.ProductResponseDTO;
+import com.scaler.demo.dto.UserDTO;
 import com.scaler.demo.exception.CategoryNotFoundException;
 import com.scaler.demo.service.FakeStoreService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.scaler.demo.service.ProductService;
 import org.springframework.web.client.RestTemplate;
@@ -19,17 +23,26 @@ import java.util.List;
 @RestController
 public class ProductController {
     private ProductService productService;
+    private Authentication authentication;
 
-    public ProductController(@Qualifier("selfProductService") ProductService productService) {
+    public ProductController(@Qualifier("selfProductService") ProductService productService,
+                             Authentication authentication) {
         this.productService = productService;
+        this.authentication = authentication;
     }
 
     // Get Product By ID
     @GetMapping("/products/{id}")
-    public ProductResponseDTO getProductById(@PathVariable("id") Integer id) {
+    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable("id") Integer id, @RequestHeader String authToken) {
+        UserDTO userDTO = authentication.validateToken(authToken);
+        ResponseEntity<Product> responseEntity = null;
+        if(userDTO == null) {
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
         Product product = productService.getProductById(id);
         //System.out.println(product.getId());
-        return product.convertToResponseDTO();
+        ProductResponseDTO responseDTO = product.convertToResponseDTO();
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     //Get All Products
